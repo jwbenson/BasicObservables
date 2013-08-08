@@ -1,0 +1,33 @@
+<html>
+    <head>
+    </head>
+    <body>
+        <script src="Observable.js"></script>
+        <script src="ObservableProperty.js"></script>
+        <script>
+            var log = function() {
+                if(console) {
+                    console.log.call(console, arguments);
+                }
+            };
+            var test = {
+                "numeric" : 123,
+                "string" : "abc",
+                "object" : { a: 1, b: 2 },
+                "array" : [1, 2, 3],
+                "date" : new Date()
+            };
+            var observable = new Observable(test);
+            observable.bind('change', '*', function (inst) {
+                log(inst.name, inst.value, inst.originalValue, inst.previousValue);
+            });
+            observable.set('numeric', 2354);
+            observable.set('numeric', 12345);
+            observable.set('object', { a: 2, b: 2 });
+            observable.set('object', { b: 2, a: 2 });
+            observable.set('object', { a: 2, b: 2 });
+            observable.set('array', [1, 2, 4]);
+            observable.set('date', new Date(new Date().setDate(new Date().getDate() + 1)));
+        </script>
+    </body>
+</html>
