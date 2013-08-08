@@ -18,6 +18,10 @@ var ObservableProperty = function (options) {
     
     var self = this;
     
+    /**
+    * set the value of this property
+    * @method
+    **/
     this.set = function (newValue) {
         if (!this.compare(newValue, self.value)) {
             self._handleBeforeChange();
@@ -28,22 +32,40 @@ var ObservableProperty = function (options) {
         }
     };
     
+    /**
+    * get the value of this property
+    * @method
+    * @return {*}
+    **/
     this.get = function() {
         return self.value;
     };
     
+    /**
+    * execute afterChange handlers
+    * @private
+    **/
     this._handleAfterChange = function () {
         for (var i = 0, l = self.afterChange.length; i < l; i++) {
             self.afterChange[i](self);
         }
     }
     
+    /**
+    * execute beforeChange handlers
+    * @private
+    **/
     this._handleBeforeChange = function () {
         for (var i = 0, l = self.beforeChange.length; i < l; i++) {
             self.beforeChange[i](self);
         }
     }
     
+    /**
+    * bind a change handler
+    * @type {string} type of handler
+    * @fn {fn} handler
+    **/
     this.bind = function (type, fn) {
         switch (type) {
             case "before": 
