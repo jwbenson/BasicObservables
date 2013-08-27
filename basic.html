@@ -1,33 +1,86 @@
+<!DOCTYPE html>
 <html>
     <head>
+        <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
     </head>
     <body>
+        <div class="container">
+            <div class="well"><h1>Basic Observables</h1></div>
+            <div class="row">                
+                <div class="span4">
+                    <h3>Data</h3>
+                   <input type="text" id="name" class="input-medium" placeholder="Name" />
+                   <button class="btn btn-primary" id="undoName">Undo</button>                    
+                   <br/>
+                   <input type="text" id="email" class="input-medium" placeholder="Email" /> 
+                   <button class="btn btn-primary" id="undoEmail">Undo</button>                   
+                </div>
+                <div class="span8 history">
+                    <h3>History</h3>
+                    <dl></dl>
+                </div>
+            </div>
+        </div>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
         <script src="Observable.js"></script>
+        <script src="HistoricObservable.js"></script>
         <script src="ObservableProperty.js"></script>
-        <script>
-            var log = function() {
-                if(console) {
-                    console.log.call(console, arguments);
-                }
-            };
-            var test = {
-                "numeric" : 123,
-                "string" : "abc",
-                "object" : { a: 1, b: 2 },
-                "array" : [1, 2, 3],
-                "date" : new Date()
-            };
-            var observable = new Observable(test);
-            observable.bind('change', '*', function (inst) {
-                log(inst.name, inst.value, inst.originalValue, inst.previousValue);
+        <script>           
+            $().ready(function () {                
+                //initial data
+                var defaults = {
+                    "name": "test",
+                    "email": "me@example.com"
+                };
+                
+                //create the observable
+                var observable = new HistoricObservable(defaults);
+                
+                //bind 'name' changes
+                observable.bind('change', 'name', function (inst) {
+                    var val = $('#name').val();
+                    $('<dt>'+ inst.name + '</dt>' + '<dd>'+ inst.value + '</dd>')
+                        .appendTo($('dl', '.history'));
+                    
+                    if(val != inst.value) {
+                        $('#name').val(inst.value);                        
+                    }
+                });
+                
+                //bind 'email' changes
+                observable.bind('change', 'email', function (inst) {
+                    var val = $('#email').val();
+                    $('<dt>'+ inst.name + '</dt>' + '<dd>'+ inst.value + '</dd>')
+                        .appendTo($('dl', '.history'));
+                    if(val != inst.value) {
+                        $('#email').val(inst.value);
+                    }
+                });
+                
+                //bind inputs
+                $('#name')
+                    .val(observable.get('name').value)
+                    .on('keyup', function (){
+                        observable.set('name', $(this).val());
+                    });
+                    
+                $('#email')
+                    .val(observable.get('email').value)
+                    .on('keyup', function (){
+                        observable.set('email', $(this).val());
+                    });
+                    
+                $('#undoName')
+                    .on('click', function () {
+                        observable.undo('name');
+                    });
+                    
+                $('#undoEmail')
+                    .on('click', function () {
+                        observable.undo('email');
+                    }); 
             });
-            observable.set('numeric', 2354);
-            observable.set('numeric', 12345);
-            observable.set('object', { a: 2, b: 2 });
-            observable.set('object', { b: 2, a: 2 });
-            observable.set('object', { a: 2, b: 2 });
-            observable.set('array', [1, 2, 4]);
-            observable.set('date', new Date(new Date().setDate(new Date().getDate() + 1)));
         </script>
     </body>
 </html>

@@ -21,6 +21,7 @@ var ObservableProperty = function (options) {
     /**
     * set the value of this property
     * @method
+    * @return boolean true if value was updated
     **/
     this.set = function (newValue) {
         if (!this.compare(newValue, self.value)) {
@@ -29,7 +30,9 @@ var ObservableProperty = function (options) {
             self.value = newValue;
             self.dirty = true;
             self._handleAfterChange();
+            return true;
         }
+        return false;
     };
     
     /**
