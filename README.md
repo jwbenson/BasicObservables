@@ -5,7 +5,8 @@ History tracking and change observation for javascript objects
 
 work in progress
 
-*Basic usage*
+**Basic usage**
+
     var data = { "pet": "cat"};
     var observable = new Observable(data);
 
@@ -15,7 +16,8 @@ work in progress
 
     observable.set('pet', 'dog');
 
-*History usage*
+**History usage**
+
     var data = { "pet": "cat"};
     var observable = new HistoricObservable(data);
     
