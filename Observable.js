@@ -5,9 +5,7 @@
  * @returns {Observable}
  */
 var Observable = function (object) {
-    'use strict';     
-    var self = this;
-    
+    'use strict';   
     object = object || {};
     
     this.observed = {};
@@ -18,7 +16,7 @@ var Observable = function (object) {
      * @returns {undefined}
      */
     this.add = function (property) {
-        self.observed[property.name] = new ObservableProperty(property);
+        this.observed[property.name] = new ObservableProperty(property);
     };
     
     /**
@@ -28,7 +26,7 @@ var Observable = function (object) {
      * @returns {undefined}
      */
     this.set = function (propertyName, value) {
-        self.observed[propertyName].set(value);
+        this.observed[propertyName].set(value);
     };
     
     /**
@@ -37,7 +35,7 @@ var Observable = function (object) {
      * @returns {ObservableProperty}
      */
     this.get = function (propertyName) {
-        return self.observed[propertyName];
+        return this.observed[propertyName];
     };
     
     /**
@@ -50,16 +48,16 @@ var Observable = function (object) {
     this.bind = function(type, propertyName, fn) {
         if (propertyName === "*") {
              for (var name in object) {
-                self.observed[name].bind(type, fn);
+                this.observed[name].bind(type, fn);
             }   
         }
         else {
-            self.observed[propertyName].bind(type, fn);
+            this.observed[propertyName].bind(type, fn);
         }
     };
     
     for (var propertyName in object) {
-        self.add({ name: propertyName, value: object[propertyName] });
+        this.add({ name: propertyName, value: object[propertyName] });
     }
 };
 

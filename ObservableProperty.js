@@ -16,20 +16,18 @@ var ObservableProperty = function (options) {
     this.afterChange = options.change || [];
     this.dirty = false;
     
-    var self = this;
-    
     /**
     * set the value of this property
     * @method
     * @return boolean true if value was updated
     **/
     this.set = function (newValue) {
-        if (!this.compare(newValue, self.value)) {
-            self._handleBeforeChange();
-            self.previousValue = self.value;
-            self.value = newValue;
-            self.dirty = true;
-            self._handleAfterChange();
+        if (!this.compare(newValue, this.value)) {
+            this._handleBeforeChange();
+            this.previousValue = this.value;
+            this.value = newValue;
+            this.dirty = true;
+            this._handleAfterChange();
             return true;
         }
         return false;
@@ -41,7 +39,7 @@ var ObservableProperty = function (options) {
     * @return {*}
     **/
     this.get = function() {
-        return self.value;
+        return this.value;
     };
     
     /**
@@ -49,8 +47,8 @@ var ObservableProperty = function (options) {
     * @private
     **/
     this._handleAfterChange = function () {
-        for (var i = 0, l = self.afterChange.length; i < l; i++) {
-            self.afterChange[i](self);
+        for (var i = 0, l = this.afterChange.length; i < l; i++) {
+            this.afterChange[i](this);
         }
     }
     
@@ -59,8 +57,8 @@ var ObservableProperty = function (options) {
     * @private
     **/
     this._handleBeforeChange = function () {
-        for (var i = 0, l = self.beforeChange.length; i < l; i++) {
-            self.beforeChange[i](self);
+        for (var i = 0, l = this.beforeChange.length; i < l; i++) {
+            this.beforeChange[i](this);
         }
     }
     
@@ -72,11 +70,11 @@ var ObservableProperty = function (options) {
     this.bind = function (type, fn) {
         switch (type) {
             case "before": 
-                self.beforeChange.push(fn);
+                this.beforeChange.push(fn);
                 break;
             case "after":
             case "change":
-                self.afterChange.push(fn);
+                this.afterChange.push(fn);
                 break;
             default:
                 throw new Error("Unknown binding");
@@ -88,10 +86,10 @@ var ObservableProperty = function (options) {
     * @see http://stackoverflow.com/questions/1068834/object-comparison-in-javascript
     * @author http://stackoverflow.com/users/228259/jean-vincent
     * @param {*} object to compare to
-    * @return {boolean} true if the newValue matches self.value
+    * @return {boolean} true if the newValue matches this.value
     **/
     this.compare = function (newValue) {
-        var x = self.value;
+        var x = this.value;
         var y = newValue;
         
         if ( x === y ) return true;

@@ -7,7 +7,6 @@
 var HistoricObservable = function (object) {
     var _base = new Observable(object);
     this.history = {};
-    var self = this;
     
     for(var property in _base) {
         this[property] = _base[property];
